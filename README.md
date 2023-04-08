@@ -38,3 +38,22 @@ npm init -y
 node src/server.js
 ```
 
+#### Node watcher
+
+> apenas a partir da ultima versão do node
+
+```bash
+node --watch src/server.js
+```
+#### Criar um Alias para o node watcher
+
+```json
+  "scripts": {
+    "dev": "node --watch src/server.js"
+  },
+```
+> Para executar o projeto, basta digitar:
+
+```bash
+npm run dev
+```
