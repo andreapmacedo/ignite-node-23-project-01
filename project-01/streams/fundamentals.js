@@ -21,7 +21,7 @@
 
 // construindo uma stream do zero  
 
-import { Readable } from 'node:stream';
+import { Readable, Writable, Transform, Duplex } from 'node:stream';
 
 class OneToHundredStream extends Readable {
   
@@ -81,5 +81,70 @@ class OneToHundredStream extends Readable {
     }
   }
   
+  // new OneToHundredStream_ex02()
+  // .pipe(process.stdout);
+
+
+
+class MultiplyByTenStream extends Writable {
+  /**
+   * O chunk é o que está sendo passado para a stream. na classe acima, no método _read em 'this.push(buf)', o buf é o chunk.
+   * O encoding é o tipo de encoding que está sendo utilizado. (utf-8, ascii, etc)
+   * O callback é uma função que deve ser chamada quando o processamento do chunk for finalizado.
+   */
+
+  /**
+   * Lembrando que dentro de uma stream de leitrura, nunca retornamos nada. (não temos um return)
+   * Apenas processamos o dado
+   */
+
+  _write(chunk, encoding, callback) {
+    console.log(Number(chunk.toString()) * 10);
+    callback();
+
+    // *sugerido pelo copilot
+    // const number = Number(chunk);
+    // console.log(number * 10);
+    // callback();
+  }
+}
+
+
+/**
+  * Lendo dados em uma stream de leitura e processando-os em um stream de escrita.
+  */ 
+
+// new OneToHundredStream_ex02()
+//   .pipe(new MultiplyByTenStream());
+
+
+class InverseNumberStream extends Transform {
+  _transform(chunk, encoding, callback) {
+    const transformed = Number(chunk.toString()) * -1;
+
+    callback(null, transformed.toString());
+    
+
+    // *sugerido pelo copilot
+    // const number = Number(chunk);
+    // const inverse = 1 / number;
+    // this.push(inverse.toString());
+    // callback();
+  }
+}  
+
+/**
+ * Lendo dados em uma stream de leitura, processando-os em um stream de transformação e depois em um stream de escrita.
+ */
+ 
+// new OneToHundredStream_ex02()
+//   .pipe(new InverseNumberStream())
+
   new OneToHundredStream_ex02()
-  .pipe(process.stdout);
+  .pipe(new InverseNumberStream())
+  .pipe(new MultiplyByTenStream());
+
+
+  /**
+   * no caso do stream Dublex, ele é um stream que pode tanto ler quanto escrever, mas não pode transformar os dados.
+   */
