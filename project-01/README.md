@@ -38,3 +38,51 @@ npm init -y
 node src/server.js
 ```
 
+#### Node watcher
+
+> apenas a partir da versão (19.8.1) do Node
+
+```bash
+node --watch src/server.js
+```
+#### Criar um Alias para o node watcher
+
+```json
+  "scripts": {
+    "dev": "node --watch src/server.js"
+  },
+```
+> Para executar o projeto, basta digitar:
+
+```bash
+npm run dev
+```
+
+#### Usando o HTTPie para testar a API
+
+> Para instalar o HTTPie, basta digitar:
+
+```bash
+snap install httpie
+```
+
+> Para testar a API, basta digitar:
+
+```bash
+http :3333
+```
+
+> Testando o método GET
+
+```bash
+http POST localhost:3333/users
+```
+
+
+> Testando o método GET
+
+```bash
+http GET localhost:3333/users
+```
+
+
