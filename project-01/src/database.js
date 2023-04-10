@@ -1,7 +1,12 @@
+import fs from 'node:fs/promises';
+
 export class  Database {
 
-
   #database = {} // # é para privado
+
+  #persist(){
+    fs.writeFile('db.json', JSON.stringify(this.#database));
+  }
 
   select(table) {
     const data = this.#database[table] ?? [];
@@ -15,29 +20,9 @@ export class  Database {
     } else {
       this.#database[table] = [data];
     }
+
+    this.#persist();
+
     return data;
   }
-
-    // *sugerido pelo copilot
-    // constructor() {
-    //   this.data = [];
-    // }
-  
-    // async create(data) {
-    //   this.data.push(data);
-    // }
-  
-    // async read() {
-    //   return this.data;
-    // }
-  
-    // async update(id, data) {
-    //   const index = this.data.findIndex(item => item.id === id);
-    //   this.data.splice(index, 1, data);
-    // }
-  
-    // async delete(id) {
-    //   const index = this.data.findIndex(item => item.id === id);
-    //   this.data.splice(index, 1);
-    // }
 }
