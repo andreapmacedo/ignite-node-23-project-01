@@ -28,32 +28,52 @@ const users = [];
 // No Node, toda porta é um servidor de streaming.
 // Toda requisição request/response é um stream e pode enviar e receber informações aos poucos.
 
-const server = http.createServer((request, response) => {
-  const { method, url } = request;
+const server = http.createServer(async(req, res) => {
+  const { method, url } = req;
 
+  const buffers = [];
+
+  // Usado quando é necessário ler todos os dados da stream de leitura antes de processá-los.
+  for await (const chunk of req) {
+    buffers.push(chunk);
+  }
+
+  // const body = Buffer.concat(buffers).toString();
+  // console.log(body); // body é uma string
+  // console.log(body.name); // Não funciona pois é uma string e não um JSON.
+  
+  // const body = JSON.parse(Buffer.concat(buffers).toString());
+  // console.log(body); // body é uma JSON
+  // console.log(body.name); // como é um JSON, podemos acessar as propriedades dele.
+
+  try {
+    req.body = JSON.parse(Buffer.concat(buffers).toString());
+  } catch (error) {
+    req.body = null; // caso o corpo da requisição não seja um JSON ou esteja vazio, o body será null.
+  }
+  
+  
   if (method === 'GET' && url === '/users') {
-    // return response.end('Listagem de usuários');
-    // return response.end(users); // retorna um erro, pois não é possível retornar um array de objetos.
-    // return response.end(JSON.stringify(users)); // retorna um array de objetos em formato JSON.
-    // o return abaixo adiciona um cabeçalho na resposta, informando que o conteúdo é um JSON. (ele vai formatar a saída)
-    return response
+    return res
     .setHeader('Content-Type', 'application/json')
     .end(JSON.stringify(users)); //
   }
 
   if (method === 'POST' && url === '/users') {
+    const { name, email } = req.body;
+
     users.push({
       id: 1,
-      name: 'Jack parse',
-      email: 'Jack@gmail.com',
+      name,
+      email,
     })
 
-    return response
+    return res
     .writeHead(201)
     .end('Criando um usuário');
   }
 
-  response.writeHead(404).end('Not found');
+  res.writeHead(404).end('Not found');
 });
 
 server.listen(3333);
