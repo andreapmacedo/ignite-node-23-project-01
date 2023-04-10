@@ -24,6 +24,10 @@ import http from 'node:http';
 
 const users = [];
 
+
+// No Node, toda porta é um servidor de streaming.
+// Toda requisição request/response é um stream e pode enviar e receber informações aos poucos.
+
 const server = http.createServer((request, response) => {
   const { method, url } = request;
 
