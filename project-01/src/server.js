@@ -44,10 +44,12 @@ const server = http.createServer((request, response) => {
       email: 'Jack@gmail.com',
     })
 
-    return response.end('Criando um usuário');
+    return response
+    .writeHead(201)
+    .end('Criando um usuário');
   }
 
-  response.end('Hello World');
+  response.writeHead(404).end('Not found');
 });
 
 server.listen(3333);
