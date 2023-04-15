@@ -33,13 +33,16 @@ const server = http.createServer(async(req, res) => {
     return routeObj.method === method && route.path.test(url)
     // Toda Regexp tem um método chamado test que recebe uma string e retorna true ou false a depender se a string bate com a expressão regular
 
-});
+  });
 
   if (route) {
     // return route.handler(req, res);
     const routeParams = req.url.match(route.path)
 
     console.log(routeParams);
+
+    req.params = { ...routeParams.groups };
+
   }
 
   res.writeHead(404).end('Not found');
