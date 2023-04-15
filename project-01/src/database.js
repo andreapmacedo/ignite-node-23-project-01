@@ -9,7 +9,6 @@ export class  Database {
 
   #database = {} // # é para privado
 
-
   constructor() {
     fs.readFile(databasePath, 'utf-8')
       .then((data) => {
@@ -19,7 +18,6 @@ export class  Database {
         this.#persist();
       });
   }
-
 
   #persist(){
     // fs.writeFile('db.json', JSON.stringify(this.#database));
@@ -41,5 +39,14 @@ export class  Database {
     this.#persist();
 
     return data;
+  }
+
+  delete(table, id) {
+    const rowIndex = this.#database[table].findIndex(row => row.id === id)
+
+    if (rowIndex > -1) {
+      this.#database[table].splice(rowIndex, 1)
+      this.#persist()
+    }
   }
 }
