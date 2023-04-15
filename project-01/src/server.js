@@ -1,10 +1,26 @@
-
 import http from 'node:http';
 import { json } from '../middlewares/json.js';
-import { Database } from './database.js';
+const  { routes } = './routes.js'
 
-// const users = [];
-const database = new Database();
+// Query Paramaters -> URL Stateful
+// parametro nomeado -> query paramater
+// São usados para filtros, paginação... (dados não sensíveis)
+// http://localhost:3333/users?userID=1 (Query Paramater -> chave: userID e valor: 1)
+// http://localhost:3333/users?userID=1&name=Diego
+
+
+// Route Paramenters
+// parametros não nomeados -> route paramenter
+// São usados para identificar recursos (dados não sensíveis)
+// GET http://localhost:3333/users/1 (Route Paramenter -> chave: userID e valor: 1)
+// DELETE http://localhost:3333/users/1
+// É feito uma combinação de método, recurso e route paramenter para identificar uma rota
+// metodo: GET, recurso: users, route paramenter: 1 
+
+// Request Body
+// envio de informações de formulário
+
+
 
 
 const server = http.createServer(async(req, res) => {
@@ -12,28 +28,12 @@ const server = http.createServer(async(req, res) => {
 
   await json(req, res);
   
+  const route = routes.find((routeObj) => { 
+    return routeObj.method === method && route.path === url;
+});
 
-  if (method === 'GET' && url === '/users') {
-    const users = database.select('users');
-    
-    return res
-    .end(JSON.stringify(users)); //
-  }
-
-  if (method === 'POST' && url === '/users') {
-    const { name, email } = req.body;
-
-    const user = {
-      id: 1,
-      name,
-      email,
-    };
-
-    database.insert('users', user);
-
-    return res
-    .writeHead(201)
-    .end('Criando um usuário');
+  if (route) {
+    return route.handler(req, res);
   }
 
   res.writeHead(404).end('Not found');
