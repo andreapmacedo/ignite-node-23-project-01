@@ -1,6 +1,8 @@
 import http from 'node:http';
-import { json } from '../middlewares/json.js';
-const  { routes } = './routes.js'
+import { json } from './middlewares/json.js';
+
+import { routes } from './routes.js';
+// import { extractQueryParams } from './utils/extract-query-params.js';
 
 // Query Paramaters -> URL Stateful
 // parametro nomeado -> query paramater
@@ -19,8 +21,6 @@ const  { routes } = './routes.js'
 
 // Request Body
 // envio de informações de formulário
-
-
 
 
 const server = http.createServer(async(req, res) => {
