@@ -1,6 +1,5 @@
 import fs from 'node:fs/promises';
 
-
 // console.log(import.meta.url); // caminho do diretório do arquivo
 // const databasePath = new URL('db.json', import.meta.url); // diretorio do arquivo	
 const databasePath = new URL('../db.json', import.meta.url); // diretório um nível acima
