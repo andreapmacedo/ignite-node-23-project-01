@@ -29,11 +29,17 @@ const server = http.createServer(async(req, res) => {
   await json(req, res);
   
   const route = routes.find((routeObj) => { 
-    return routeObj.method === method && route.path === url;
+    // return routeObj.method === method && route.path === url;
+    return routeObj.method === method && routeObj.path.test(url)
+    // Toda Regexp tem um método chamado test que recebe uma string e retorna true ou false a depender se a string bate com a expressão regular
+
 });
 
   if (route) {
-    return route.handler(req, res);
+    // return route.handler(req, res);
+    const routeParams = req.url.match(route.path)
+
+    console.log(routeParams);
   }
 
   res.writeHead(404).end('Not found');
